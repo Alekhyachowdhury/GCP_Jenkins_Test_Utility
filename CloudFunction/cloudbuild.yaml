@@ -1,0 +1,25 @@
+steps:
+- id: "deploy cf"
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - testing_utility_cf
+  - --region=europe-west1
+  - --source=.
+  - --trigger-topic=input_pubsub_topic
+  - --runtime=python39
+  - --entry-point=mapper
+
+  dir: "CloudFunction"
+
+- id: "trigger test"
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args: ['curl','-u','admin:password','jenkins_ip/job/GCP-Test-Utility-Pipeline/build?token=test_utility_trigger']
+
+
+  dir: "CloudFunction"
+
+
+  
